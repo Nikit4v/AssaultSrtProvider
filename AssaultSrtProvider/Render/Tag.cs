@@ -5,12 +5,12 @@ namespace Renders
 {
     class Tag
     {
-        public Style Style;
+        public Style[] Styles;
         public string Text;
         public int[] Position;
-        public Tag(string Text,Style Style,int[] Position)
+        public Tag(string Text,Style[] Styles,int[] Position)
         {
-            this.Style = Style;
+            this.Styles = Styles;
             this.Text = Text;
             this.Position = Position;
         }

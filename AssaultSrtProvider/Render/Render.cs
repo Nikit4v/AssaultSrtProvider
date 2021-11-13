@@ -29,56 +29,36 @@ namespace AssaultSrtProvider.Render
         {
             _resolution = resolution;
         }
-    }
 
-    class Render /* : Renderer */
-    {
-        public string TempFolderPath;
-        public Slicer Slicer;
-        public Render(string VideoFilePath, string TempFolderPath)
+        public byte[] RendSnapshot(Snapshot snapshot, byte[] rawframe)
         {
-            this.Slicer = new Slicer(VideoFilePath, TempFolderPath);
-            this.TempFolderPath = TempFolderPath;
-        }
-        public void Rend_Snapshot(Snapshot snapshot,SKCanvas canvas)
-        {
+            /// <summary>
+            /// Функция рендеринга Snapshot, как понятно из названия, поверх фрейма видео
+            /// </summary>
+            /// <param name="snapshot">Внезапно Snapshot</param>
+            /// <param name="snapshot">На удивление сырые байты Фрейма </param>
+            /// <returns>byte[] Фрейма с отрендереными тегами</returns>
+            var surface = SKSurface.Create(new SKImageInfo(_resolution.Item1, _resolution.Item2));
+            var canvas = surface.Canvas;
             foreach(var tag in snapshot.Tags)
             {
-                for(int i = 0; i<tag.Style.TextStyles.Length; i++)
+                foreach(var lay in tag.Styles)
                 {
-                    var paint = new SKPaint(SKTypeface.FromFile(tag.Style.FontFile).ToFont());
-                    paint.Style = (SKPaintStyle)tag.Style.TextStyles[i];
-                    paint.TextSize = tag.Style.FontSize;
-                    var Color = tag.Style.Colors[i];
+                    if (lay.BorderInfo != null)
+                    {
+                        canvas.DrawImage(SKImage.FromBitmap(SKBitmap.Decode(lay.BorderInfo.image)),lay.BorderInfo.position[0], lay.BorderInfo.position[0]);
+                    }
+                    var paint = new SKPaint(SKTypeface.FromFile(lay.FontFile).ToFont());
+                    paint.Style = (SKPaintStyle)lay.TextType;
+                    paint.TextSize = lay.FontSize;
+                    var Color = lay.Color;
                     paint.Color = new SKColor(Color[0], Color[1], Color[2], Color[3]);
-                    paint.StrokeWidth = tag.Style.BorderSize[i];
-                    paint.MaskFilter = SKMaskFilter.CreateBlur(SKBlurStyle.Inner, tag.Style.blur[i], false);
-                    canvas.DrawText(tag.Text, tag.Position[0], tag.Position[1], paint);
+                    paint.StrokeWidth = lay.BorderSize;
+                    paint.MaskFilter = SKMaskFilter.CreateBlur(SKBlurStyle.Inner, lay.blur, false);
+                    canvas.DrawText(tag.Text, tag.Position[0]+lay.position[0], tag.Position[1]+lay.position[1], paint);
                 }
             }
-        }
-        public void SaveFrame(SKSurface surface)
-        {
-            SKImage image = surface.Snapshot();
-            var data = image.Encode(SKEncodedImageFormat.Png, 80);
-            var stream = File.OpenWrite(Path.Combine(TempFolderPath, "frame.png"));
-            data.SaveTo(stream);
-        }
-        
-        public SKSurface RenderFrame(Snapshot[] snapshots, double time, float x = 0.0f, float y = 0.0f)
-        {
-            
-            var frame = SKBitmap.Decode(Slicer.get_frame(time));
-            //var frame = SKBitmap.Decode(@"D:\user\Pictures\cs.png");
-            var info = new SKImageInfo(frame.Width, frame.Height);
-            var surface = SKSurface.Create(info);
-            var canvas = surface.Canvas;
-            canvas.DrawBitmap(frame, x,y);
-            foreach(var snapshot in snapshots)
-            {
-                Rend_Snapshot(snapshot, canvas);
-            }
-            return (surface);
+            return (SKBitmap.FromImage(surface.Snapshot()).Bytes);
         }
     }
 }
