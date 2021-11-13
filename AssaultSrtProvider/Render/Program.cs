@@ -6,21 +6,22 @@ using System.Drawing.Printing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Drawing.Design;
+using AssaultSrtProvider.Render;
 using SkiaSharp;
-using SkiaSharp.Views.Forms;
+// using SkiaSharp.Views.Forms;
 
 namespace Renders
 {
-    class Program
-    {
-        public static Test Test = new Test();
-        public static RSw RSw = new RSw();
-        static void Main()
-        {
-            Test.rendtest();
-        }
-        
-    }
+    // class Program
+    // {
+    //     public static Test Test = new Test();
+    //     public static RSw RSw = new RSw();
+    //     static void Main()
+    //     {
+    //         Test.rendtest();
+    //     }
+    //     
+    // }
     class Test
     {
         
@@ -35,7 +36,7 @@ namespace Renders
              test.Tags = new Tag[] { tt,ttt };
              test.Start = 1;
              test.End = 100;
-             Render.Save_Frame(Render.Rend_Frame(new Snapshot[] { test }, 300));
+             Render.SaveFrame(Render.RenderFrame(new Snapshot[] { test }, 300));
 
         }
     }
