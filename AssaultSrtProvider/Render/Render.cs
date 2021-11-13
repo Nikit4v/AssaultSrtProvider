@@ -1,16 +1,37 @@
+using System;
 using System.IO;
 using Renders;
 using SkiaSharp;
 
 namespace AssaultSrtProvider.Render
 {
+    /// <summary>
+    /// Используй этот класс как шаблон (сохраняя имена и реализуя хотя-бы представленные варианты функций)
+    /// </summary>
     abstract class Renderer
     {
-        // Используй этот класс как шаблон (сохраняя имена и реализуя хотя-бы представленные варианты функций)
+        private readonly (int, int) _resolution;
+
+        /// <summary>
+        /// Рендеринг картинки на поверх другой картинки. Пока будем байты гонять, но если найдём адекватную либу, то перейдём на неё
+        /// </summary>
+        /// <param name="inputFrame">Байты фрейма. Размер не указан, но всегда можно прочитать из `_resolution`</param>
+        /// <param name="snapshot">собственно сам снапшот для рендера</param>
+        /// <returns>Новый фрейм в виде байтов</returns>
+        /// <comment>
+        /// Рекомендую (для разделения кода + для лёгкости перестройки в случае чего) сразу написать RenderTag.
+        /// Также стоит учесть, что перетаскивание байтов из подконтрольной памяти в свободную процесс сложный, и его тоже лучше
+        /// прописать отдельным методом. (подробнее: https://stackoverflow.com/questions/48017310/how-to-convert-a-byte-array-to-skbitmap-in-skiasharp)
+        /// </comment>
         public abstract byte[] RenderSnapshot(byte[] inputFrame, Snapshot snapshot);
+
+        protected Renderer((int, int) resolution)
+        {
+            _resolution = resolution;
+        }
     }
 
-    class Render
+    class Render /* : Renderer */
     {
         public string TempFolderPath;
         public Slicer Slicer;
