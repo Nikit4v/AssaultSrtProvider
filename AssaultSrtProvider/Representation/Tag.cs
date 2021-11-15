@@ -1,6 +1,6 @@
 namespace AssaultSrtProvider.Representation
 {
-    public class Tag
+    public struct Tag
     {
         public string Text;
 

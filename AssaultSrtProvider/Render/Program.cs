@@ -1,16 +1,8 @@
-﻿using System;
-using System.IO;
-using System.Drawing;
-using System.Drawing.Text;
-using System.Drawing.Printing;
-using System.Drawing.Drawing2D;
-using System.Drawing.Imaging;
-using System.Drawing.Design;
-using AssaultSrtProvider.Render;
-using SkiaSharp;
+﻿
+
 // using SkiaSharp.Views.Forms;
 
-namespace Renders
+namespace AssaultSrtProvider.Render
 {
     // class Program
     // {

@@ -1,10 +1,7 @@
-using System;
-using System.IO;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Drawing.Text;
 
-namespace Renders
+namespace AssaultSrtProvider.Render
 {
     class RSw
     {

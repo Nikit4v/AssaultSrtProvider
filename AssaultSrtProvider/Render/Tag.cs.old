@@ -1,0 +1,18 @@
+
+
+
+namespace AssaultSrtProvider.Render
+{
+    class Tag
+    {
+        public Style[] Styles;
+        public string Text;
+        public int[] Position;
+        public Tag(string text, Style[] styles, int[] position)
+        {
+            Styles = styles;
+            Text = text;
+            Position = position;
+        }
+    }
+}
