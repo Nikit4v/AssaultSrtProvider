@@ -50,8 +50,6 @@ namespace AssaultSrtProvider.Render
             return (SKBitmap.FromImage(surface.Snapshot()).Bytes);
         }
 
-        public 
-
         protected Renderer((int, int) resolution)
         {
             _resolution = resolution;
