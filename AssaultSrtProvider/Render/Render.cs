@@ -27,25 +27,31 @@ namespace AssaultSrtProvider.Render
         {
             var surface = SKSurface.Create(new SKImageInfo(_resolution.Item1, _resolution.Item2));
             var canvas = surface.Canvas;
+            var style = snapshot.Style;
             foreach(var tag in snapshot.Tags)
             {
-                foreach(var layer in RenderObject.FromTag(tag))
-                    // Вместо старого
-                    // foreach(var layer in tag.styles)
+                /// Оно с твоими структурами не робит! <-!!!
+                //if (style.BorderInfo != null)
+                //{
+                //    canvas.DrawImage(SKImage.FromBitmap(SKBitmap.Decode(style.BorderInfo.image)), layer.BorderInfo.position[0], layer.BorderInfo.position[0]);
+                //}
+                var paint = new SKPaint(SKTypeface.FromFile(style.FontFile).ToFont());
+                paint.Style = (SKPaintStyle)style.TextType;
+                paint.TextSize = style.FontSize;
+                var color = style.Color;
+                paint.Color = new SKColor(color[0], color[1], color[2], color[3]);
+                paint.StrokeWidth = style.BorderSize;
+                paint.MaskFilter = SKMaskFilter.CreateBlur(SKBlurStyle.Inner, style.Blur, false);
+                ///Оно тоже нормально со структурами не робит {
+                if (tag.Position != null)
                 {
-                    if (layer.BorderInfo != null)
-                    {
-                        canvas.DrawImage(SKImage.FromBitmap(SKBitmap.Decode(layer.BorderInfo.image)),layer.BorderInfo.position[0], layer.BorderInfo.position[0]);
-                    }
-                    var paint = new SKPaint(SKTypeface.FromFile(layer.FontFile).ToFont());
-                    paint.Style = (SKPaintStyle) layer.TextType;
-                    paint.TextSize = layer.FontSize;
-                    var color = layer.Color;
-                    paint.Color = new SKColor(color[0], color[1], color[2], color[3]);
-                    paint.StrokeWidth = layer.BorderSize;
-                    paint.MaskFilter = SKMaskFilter.CreateBlur(SKBlurStyle.Inner, layer.blur, false);
-                    canvas.DrawText(tag.Text, tag.Position[0]+layer.position[0], tag.Position[1]+layer.position[1], paint);
+                    canvas.DrawText(tag.Text, tag.Position.Item1, tag.Position.Item2, paint);
                 }
+                else
+                {
+                    canvas.DrawText(tag.Text,_resolution.Item1-(tag.Text.Length*style.FontSize/4), _resolution.Item2-style.FontSize*4, paint);
+                }
+                ///}
             }
             return (SKBitmap.FromImage(surface.Snapshot()).Bytes);
         }
