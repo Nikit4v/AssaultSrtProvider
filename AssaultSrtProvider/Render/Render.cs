@@ -30,7 +30,8 @@ namespace AssaultSrtProvider.Render
             var style = snapshot.Style;
             foreach(var tag in snapshot.Tags)
             {
-                /// Оно с твоими структурами не робит! <-!!!
+                // Оно с твоими структурами не робит! <-!!!
+                // Так и не должно!!! Я переписать просил!!!
                 //if (style.BorderInfo != null)
                 //{
                 //    canvas.DrawImage(SKImage.FromBitmap(SKBitmap.Decode(style.BorderInfo.image)), layer.BorderInfo.position[0], layer.BorderInfo.position[0]);
