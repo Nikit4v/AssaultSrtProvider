@@ -3,7 +3,7 @@ namespace AssaultSrtProvider.Representation
     public struct Tag
     {
         public string Text;
-        public dynamic Position;
+        public (int, int)? Position;
         public new string ToString()
         {
             return Text;
